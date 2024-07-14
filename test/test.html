@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Response</title>
+</head>
+<body>
+    <h1>Stream Response</h1>
+    <textarea id="response" rows="20" cols="100"></textarea>
+
+    <script>
+        async function fetchStream() {
+            const response = await fetch('http://localhost:8000/stream', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_input: "행정법의무하자 재량행사 청구권에 대해 알려줘" })
+            });
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            const textarea = document.getElementById('response');
+            textarea.value = "";
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                textarea.value += decoder.decode(value, { stream: true });
+            }
+        }
+
+        fetchStream();
+    </script>
+</body>
+</html>
