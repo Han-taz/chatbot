@@ -8,15 +8,24 @@
 <body>
     <h1>Stream Response</h1>
     <textarea id="response" rows="20" cols="100"></textarea>
+    <br><br>
+    <input type="text" id="userInput" placeholder="질문을 입력하세요" size="100">
+    <button onclick="fetchStream()">질문 보내기</button>
 
     <script>
         async function fetchStream() {
+            const userInput = document.getElementById('userInput').value;
+            if (!userInput) {
+                alert("질문을 입력하세요");
+                return;
+            }
+
             const response = await fetch('http://localhost:8000/stream', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ user_input: "행정법의무하자 재량행사 청구권에 대해 알려줘" })
+                body: JSON.stringify({ user_input: userInput })
             });
 
             const reader = response.body.getReader();
@@ -30,8 +39,6 @@
                 textarea.value += decoder.decode(value, { stream: true });
             }
         }
-
-        fetchStream();
     </script>
 </body>
 </html>
