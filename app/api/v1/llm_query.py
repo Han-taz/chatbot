@@ -1,6 +1,6 @@
 from langchain_core.output_parsers import StrOutputParser
 from app.core.llm import llm
-from app.template.llm_qurery_prompt import llm_prompt
+from app.prompts.llm_qurery_prompt import llm_prompt
 
 chain = llm_prompt|llm|StrOutputParser()
 
